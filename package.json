@@ -32,6 +32,7 @@
     "prepublish": "npm run build"
   },
   "devDependencies": {
+    "@types/express": "^4.17.20",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1"
   }
