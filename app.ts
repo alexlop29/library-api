@@ -1,4 +1,19 @@
+/*
+NOTE TO SELF: Reminder to update.
+*/
 
-export function sayHelloWorld(world: string) {
-  return `Hello ${world}`;
-}
+import express from 'express';
+
+const app = express();
+const EXPRESS_PORT = 3000;
+
+// Sample Route
+app.get('/', (req, res) => {
+    res.send('Hi Alex')
+  })
+
+app.listen(EXPRESS_PORT, () => {
+    console.log(`Server is running on http://localhost:${EXPRESS_PORT}`);
+});
+
+export { app }; 
