@@ -1,0 +1,31 @@
+{
+  "name": "library-api",
+  "version": "1.0.0",
+  "main": "./lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexlop29/library-api.git"
+  },
+  "author": {
+    "name": "alexlop29"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "tslint": "^6.1.3",
+    "typescript": "^5.2.2"
+  },
+  "bugs": {
+    "url": "https://github.com/alexlop29/library-api/issues"
+  },
+  "homepage": "https://github.com/alexlop29/library-api#readme",
+  "files": [
+    "./bin/*",
+    "./lib/*"
+  ],
+  "typings": "./lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "lint": "tslint -c tslint.json src/**/*.ts",
+    "prepublish": "npm run build"
+  }
+}
