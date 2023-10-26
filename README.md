@@ -12,6 +12,8 @@ npm i --save-dev @types/express
 npm install --save-dev --save-exact prettier
 npm install --save-dev eslint
 npm install --save @sentry/node @sentry/profiling-node
+npm install --save-dev jest
+npm install --save-dev @babel/preset-typescript
 ```
 
 ## Running the application

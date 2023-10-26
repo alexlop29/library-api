@@ -8,6 +8,7 @@ import express from "express";
 import * as Sentry from "@sentry/node";
 import { ProfilingIntegration } from "@sentry/profiling-node";
 import { SENTRY_DSN } from "./config/environment";
+import { adminRoute } from "./routes/admin";
 
 const app = express();
 const EXPRESS_PORT = 3000;
@@ -41,6 +42,8 @@ app.get("/", (_req, res) => {
 app.get("/debug-sentry", function mainHandler(req, res) {
   throw new Error("My first Sentry error!");
 });
+
+app.use('/admin', adminRoute);
 
 // The error handler must be registered before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());

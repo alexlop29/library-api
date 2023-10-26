@@ -39,8 +39,10 @@
     "sentry:sourcemaps": "sentry-cli sourcemaps inject --org alexander-lopez --project node-express ./build && sentry-cli sourcemaps upload --org alexander-lopez --project node-express ./build"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.23.2",
     "@types/express": "^4.17.20",
     "eslint": "^8.52.0",
+    "jest": "^29.7.0",
     "nodemon": "^3.0.1",
     "prettier": "3.0.3",
     "ts-node": "^10.9.1"
