@@ -11,6 +11,9 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@sentry/cli": "^2.21.2",
+    "@sentry/node": "^7.75.1",
+    "@sentry/profiling-node": "^1.2.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "mongoose": "^7.6.3",
