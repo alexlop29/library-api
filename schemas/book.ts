@@ -10,7 +10,7 @@ const bookSchema = new Schema(
     },
     librarianId: {
       type: Schema.Types.ObjectId,
-      ref: "librarianSchema",
+      ref: "librarians",
       required: true,
     },
   },
