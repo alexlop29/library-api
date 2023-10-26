@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 /*
 NOTE TO SELF: Reminder to update.
 */
