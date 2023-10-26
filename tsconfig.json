@@ -5,16 +5,13 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "lib": ["es2015"],
-
     "rootDir": "src",
     "outDir": "lib",
-
     "strict": true,
     "alwaysStrict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
-
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
@@ -22,13 +19,18 @@
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "downlevelIteration": true,
     "declaration": true,
+    "pretty": true,
+    "sourceMap": true,
+    "inlineSources": true,
 
-    "pretty": true
+    // Set `sourceRoot` to  "/" to strip the build path prefix
+    // from generated source code references.
+    // This improves issue grouping in Sentry.
+    "sourceRoot": "/"
   },
   "include": ["typings/**/*", "src/**/*"]
 }

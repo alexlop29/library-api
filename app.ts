@@ -36,6 +36,10 @@ app.get("/", (_req, res) => {
   res.send("Hi Alex");
 });
 
+app.get("/debug-sentry", function mainHandler(req, res) {
+  throw new Error("My first Sentry error!");
+});
+
 // The error handler must be registered before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());
 
@@ -46,7 +50,6 @@ app.use(function onError(err, req, res, next) {
   res.statusCode = 500;
   res.end(res.sentry + "\n");
 });
-
 
 app.listen(EXPRESS_PORT, () => {
   console.log(`Server is running on http://localhost:${EXPRESS_PORT}`);

@@ -31,11 +31,12 @@
   "typings": "./lib/index.d.ts",
   "scripts": {
     "start-debug": "DEBUG=express:* nodemon ./app.ts",
-    "build": "tsc",
+    "build": "tsc && yarn sentry:sourcemaps",
     "lint": "tslint -c tslint.json src/**/*.ts",
     "eslint": "eslint .",
     "format": "npx prettier . --write",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org alexander-lopez --project node-express ./build && sentry-cli sourcemaps upload --org alexander-lopez --project node-express ./build"
   },
   "devDependencies": {
     "@types/express": "^4.17.20",
