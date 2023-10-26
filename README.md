@@ -27,6 +27,7 @@ npm run start-debug
 need to install prettier, eslint, etc.
 
 formatting
+
 ```
 npm run format
 ```
@@ -37,6 +38,6 @@ npm run format
 Add Docker Compose with MongoDB; Atlas requires IP addresses.
 ```
 
-
 ### Configure Sentry
+
 platform: expressjs (nodejs)
