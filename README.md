@@ -10,6 +10,8 @@ npm install mongoose --save
 npm install --save-dev ts-node
 npm i --save-dev @types/express
 npm install --save-dev --save-exact prettier
+npm install --save-dev eslint
+npm install --save @sentry/node @sentry/profiling-node
 ```
 
 ## Running the application
@@ -23,7 +25,16 @@ npm run start-debug
 need to install prettier, eslint, etc.
 
 formatting
-
 ```
 npm run format
 ```
+
+## Database Design
+
+```
+Add Docker Compose with MongoDB; Atlas requires IP addresses.
+```
+
+
+### Configure Sentry
+platform: expressjs (nodejs)
