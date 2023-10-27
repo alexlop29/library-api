@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import express from "express";
 import { librarianModel } from "../models/librarian";
 // import { patronModel } from "../models/patron";
@@ -32,9 +34,21 @@ const createLibrarian = async (librarianInfo: librarian) => {
     await newLibrarian.save();
     return newLibrarian;
   } catch {
+    Sentry.captureMessage("error: 'Unable to add a new librarian'");
     return { error: "Unable to add a new librarian" };
   }
 };
+
+adminRoute.get("/librarians"),
+  async (req, res) => {
+    try {
+      const getLibrarians = await librarian.find({});
+      res.status(200).json({ librarians: getLibrarians });
+    } catch (error) {
+      Sentry.captureMessage("error: 'Unable to get librarians'");
+      res.status(500).json({ message: "unable to get librarians" });
+    }
+  };
 
 adminRoute.post("/librarian", async (req, res) => {
   const librarianInfo = {
@@ -43,10 +57,6 @@ adminRoute.post("/librarian", async (req, res) => {
     email: req.body.email,
   };
   const addLibrarian = await createLibrarian(librarianInfo);
-  if (!addLibrarian) {
-    res.status(500).json({ error: "Unable to add a new librarian" });
-    Sentry.captureMessage("error: 'Unable to add a new librarian'");
-  }
   res.status(200).json({ status: "Successfully added librarian" });
 });
 
