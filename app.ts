@@ -3,7 +3,6 @@
 /*
 NOTE TO SELF: Reminder to update.
 */
-
 import express from "express";
 import * as Sentry from "@sentry/node";
 import { ProfilingIntegration } from "@sentry/profiling-node";

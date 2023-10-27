@@ -22,20 +22,18 @@ adminRoute.use(express.json());
 const librarian = librarianModel;
 // const patron = patronModel;
 
-/*
-Confirm error handling works as expected
-*/
 const createLibrarian = async (librarianInfo: librarian) => {
-  let newLibrarian = new librarian({
-    firstName: librarianInfo.firstName,
-    lastName: librarianInfo.lastName,
-    email: librarianInfo.email,
-  });
-  await newLibrarian.save();
-  if (!newLibrarian) {
+  try {
+    let newLibrarian = new librarian({
+      firstName: librarianInfo.firstName,
+      lastName: librarianInfo.lastName,
+      email: librarianInfo.email,
+    });
+    await newLibrarian.save();
+    return newLibrarian;
+  } catch {
     return { error: "Unable to add a new librarian" };
   }
-  return newLibrarian;
 };
 
 adminRoute.post("/librarian", async (req, res) => {
@@ -49,7 +47,7 @@ adminRoute.post("/librarian", async (req, res) => {
     res.status(500).json({ error: "Unable to add a new librarian" });
     Sentry.captureMessage("error: 'Unable to add a new librarian'");
   }
-  res.status(200).json({ status: "Successfully updated cart" });
+  res.status(200).json({ status: "Successfully added librarian" });
 });
 
 export { adminRoute };
