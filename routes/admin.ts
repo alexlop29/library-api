@@ -39,50 +39,48 @@ const createLibrarian = async (req) => {
   }
 };
 
-adminRoute.get("/librarians"),
-  async (req, res) => {
-    try {
-      const getLibrarians = await librarian.find({});
-      res.status(200).json({ librarians: getLibrarians });
-    } catch (error) {
-      Sentry.captureMessage("error: 'Unable to get librarians'");
-      res.status(500).json({ message: "unable to get librarians" });
+const getLibrarians = async () => {
+  try {
+    let allLibrarians = await librarian.find({});
+    return allLibrarians;
+  } catch (error) {
+    Sentry.captureException(error.message);
+    return { error: error.message };
+  }
+};
+
+adminRoute.get("/librarians", async (req, res) => {
+    const returnedLibrarians = await getLibrarians();
+    if (returnedLibrarians.hasOwnProperty("error")) {
+      res.status(500).json({
+        status: "Failed to get all librarians",
+        returnedLibrarians,
+      });
+    } else {
+      res.status(200).json({
+        status: "Successfully retrieved all librarians",
+        returnedLibrarians,
+      });
     }
-  };
+  });
 
-// adminRoute.post("/librarian", async (req, res) => {
-//   const librarianInfo = {
-//     firstName: req.body.firstName,
-//     lastName: req.body.lastName,
-//     email: req.body.email,
-//   };
-//   console.log(librarianInfo);
-//   const addLibrarian = await createLibrarian(librarianInfo);
-//   if (addLibrarian.hasOwnProperty("error")) {
-//     res.status(500).json({
-//       status: "Unable to add librarian",
-//       message: addLibrarian,
-//     });
-//   }
-//   res.status(200).json({
-//     status: "Successfully added librarian",
-//     message: addLibrarian,
-//   });
-// });
-
+/*
+Consider improving error handling by querying for a `validation` to
+return a 400 error.
+*/
 adminRoute.post("/librarian", async (req, res) => {
   const addLibrarian = await createLibrarian(req);
   if (addLibrarian.hasOwnProperty("error")) {
     res.status(500).json({
-      status: "Unable to add a new librarian",
+      status: "Failed to add a new librarian",
       addLibrarian,
     });
   } else {
     res.status(200).json({
       status: "Successfully added a new librarian",
       addLibrarian,
-    })
-  };
+    });
+  }
 });
 
 export { adminRoute };
