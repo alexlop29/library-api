@@ -15,6 +15,7 @@ const patronSchema = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     status: {
       type: Boolean,
