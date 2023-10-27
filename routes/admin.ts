@@ -24,18 +24,18 @@ adminRoute.use(express.json());
 const librarian = librarianModel;
 // const patron = patronModel;
 
-const createLibrarian = async (librarianInfo: librarian) => {
+const createLibrarian = async (req) => {
   try {
     let newLibrarian = new librarian({
-      firstName: librarianInfo.firstName,
-      lastName: librarianInfo.lastName,
-      email: librarianInfo.email,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
     });
     await newLibrarian.save();
     return newLibrarian;
-  } catch {
-    Sentry.captureMessage("error: 'Unable to add a new librarian'");
-    return { error: "Unable to add a new librarian" };
+  } catch (error) {
+    Sentry.captureException(error.message);
+    return { error: error.message };
   }
 };
 
@@ -50,14 +50,39 @@ adminRoute.get("/librarians"),
     }
   };
 
+// adminRoute.post("/librarian", async (req, res) => {
+//   const librarianInfo = {
+//     firstName: req.body.firstName,
+//     lastName: req.body.lastName,
+//     email: req.body.email,
+//   };
+//   console.log(librarianInfo);
+//   const addLibrarian = await createLibrarian(librarianInfo);
+//   if (addLibrarian.hasOwnProperty("error")) {
+//     res.status(500).json({
+//       status: "Unable to add librarian",
+//       message: addLibrarian,
+//     });
+//   }
+//   res.status(200).json({
+//     status: "Successfully added librarian",
+//     message: addLibrarian,
+//   });
+// });
+
 adminRoute.post("/librarian", async (req, res) => {
-  const librarianInfo = {
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    email: req.body.email,
+  const addLibrarian = await createLibrarian(req);
+  if (addLibrarian.hasOwnProperty("error")) {
+    res.status(500).json({
+      status: "Unable to add a new librarian",
+      addLibrarian,
+    });
+  } else {
+    res.status(200).json({
+      status: "Successfully added a new librarian",
+      addLibrarian,
+    })
   };
-  const addLibrarian = await createLibrarian(librarianInfo);
-  res.status(200).json({ status: "Successfully added librarian" });
 });
 
 export { adminRoute };
