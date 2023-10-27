@@ -1,6 +1,6 @@
 import express from "express";
 import { librarianModel } from "../models/librarian";
-import { patronModel } from "../models/patron";
+// import { patronModel } from "../models/patron";
 import * as Sentry from "@sentry/node";
 
 type librarian = {
@@ -9,18 +9,18 @@ type librarian = {
   email: String;
 };
 
-type patron = {
-  firstName: String;
-  lastName: String;
-  email: String;
-  status: Boolean;
-};
+// type patron = {
+//   firstName: String;
+//   lastName: String;
+//   email: String;
+//   status: Boolean;
+// };
 
 const adminRoute = express.Router();
 adminRoute.use(express.json());
 
 const librarian = librarianModel;
-const patron = patronModel;
+// const patron = patronModel;
 
 /*
 Confirm error handling works as expected
@@ -51,3 +51,5 @@ adminRoute.post("/librarian", async (req, res) => {
   }
   res.status(200).json({ status: "Successfully updated cart" });
 });
+
+export { adminRoute };

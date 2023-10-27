@@ -9,9 +9,9 @@ import * as Sentry from "@sentry/node";
 import { ProfilingIntegration } from "@sentry/profiling-node";
 import { SENTRY_DSN } from "./config/environment";
 import { adminRoute } from "./routes/admin";
+import { EXPRESS_PORT } from "./config/environment";
 
 const app = express();
-const EXPRESS_PORT = 3000;
 
 Sentry.init({
   dsn: SENTRY_DSN,
