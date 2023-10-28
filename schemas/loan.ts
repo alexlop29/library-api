@@ -10,7 +10,7 @@ const loanSchema = new Schema(
     },
     endTime: {
       type: Date,
-      required: false,
+      required: true,
     },
     bookId: {
       type: Schema.Types.ObjectId,
