@@ -12,7 +12,7 @@ const librarian = librarianModel;
 
 const createBook = async (isbn, librarianId) => {
   try {
-    let newBook = new book({
+    const newBook = new book({
       isbn: isbn,
       librarianId: librarianId,
     });
@@ -24,9 +24,6 @@ const createBook = async (isbn, librarianId) => {
   }
 };
 
-/*
-Confirm error handling works as expected.
-*/
 const retrieveLibrarianId = async (email: string) => {
   try {
     const locatedLibrarian = await librarian.findOne({ email: email });
@@ -39,6 +36,31 @@ const retrieveLibrarianId = async (email: string) => {
     return { error: error.message };
   }
 };
+
+const getBooks = async () => {
+  try {
+    const allBooks = await book.find({});
+    return allBooks;
+  } catch (error) {
+    Sentry.captureException(error.message);
+    return { error: error.message };
+  };
+};
+
+bookRoute.get("/", async (req, res) => {
+  const returnedBooks = await getBooks();
+  if (returnedBooks.hasOwnProperty("error")) {
+    res.status(500).json({
+      status: "Failed to get all books",
+      returnedBooks,
+    });
+  } else {
+    res.status(200).json({
+      status: "Successfully retrieved all books",
+      returnedBooks,
+    });
+  }
+});
 
 /*
 NOTE: (alopez) Consider improving error handling by querying for a `validation` to
@@ -54,7 +76,6 @@ bookRoute.post("/", async (req, res) => {
     return;
   }
   const addBook = await createBook(req.body.isbn, getLibrarianCredentials);
-  console.log(`addBook: ${addBook}`);
   if (addBook.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Unable to create a new book entry",
