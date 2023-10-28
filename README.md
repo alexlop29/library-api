@@ -41,3 +41,5 @@ Add Docker Compose with MongoDB; Atlas requires IP addresses.
 ### Configure Sentry
 
 platform: expressjs (nodejs)
+
+Migrate functions to another folder, separate from the routes

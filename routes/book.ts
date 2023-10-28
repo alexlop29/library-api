@@ -24,6 +24,17 @@ const createBook = async (isbn, librarianId) => {
   }
 };
 
+const deleteBook = async (bookId) => {
+  try {
+    const removeBook = await book.deleteOne({ _id: bookId });
+    await removeBook.save();
+    return removeBook;
+  } catch (error) {
+    Sentry.captureException(error.message);
+    return { error: error.message };
+  }
+};
+
 const retrieveLibrarianId = async (email: string) => {
   try {
     const locatedLibrarian = await librarian.findOne({ email: email });
@@ -44,7 +55,7 @@ const getBooks = async () => {
   } catch (error) {
     Sentry.captureException(error.message);
     return { error: error.message };
-  };
+  }
 };
 
 bookRoute.get("/", async (req, res) => {
@@ -84,6 +95,18 @@ bookRoute.post("/", async (req, res) => {
     return;
   }
   res.status(200).json(addBook);
+});
+
+bookRoute.delete("/:bookId", async (req, res) => {
+  const removedBook = await deleteBook(req.params.bookId);
+  if (removedBook.hasOwnProperty("error")) {
+    res.status(500).json({
+      status: "Unable to remove book",
+      removedBook,
+    });
+    return;
+  }
+  res.status(200).json(removedBook);
 });
 
 export { bookRoute };
