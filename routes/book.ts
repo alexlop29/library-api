@@ -27,7 +27,6 @@ const createBook = async (isbn, librarianId) => {
 const deleteBook = async (bookId) => {
   try {
     const removeBook = await book.deleteOne({ _id: bookId });
-    await removeBook.save();
     return removeBook;
   } catch (error) {
     Sentry.captureException(error.message);
