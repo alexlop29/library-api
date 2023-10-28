@@ -44,6 +44,37 @@ const confirmPatronExists = async (patronId: String) => {
   }
 };
 
+const checkNumberOfActiveLoans = async (patronId: String) => {
+  try {
+    const countOfLoans = await loan.count({
+      patronId: patronId,
+      isReturned: true,
+    });
+    if (countOfLoans > 3) {
+      return { error: "Too many active loans" };
+    }
+  } catch (error) {
+    Sentry.captureException(error.message);
+    return { error: error.message };
+  }
+};
+
+const checkOverdueStatus = async (patronId: String) => {
+  try {
+    const currentDate = new Date();
+    const findOverdueBook = await loan.findOne({
+      patronId: patronId,
+      endTime: { $lt: currentDate },
+    });
+    if (findOverdueBook) {
+      return { error: "Located an overdue book" };
+    }
+  } catch (error) {
+    Sentry.captureException(error.message);
+    return { error: error.message };
+  }
+};
+
 const confirmLoanAvailability = async (bookId: String) => {
   try {
     const bookAvailability = await loan.findOne({
@@ -90,19 +121,35 @@ does not exist.
 
 // use type to confirm all necessary parameters are passed by the user
 loanRoute.post("/", async (req, res) => {
-  const checkBookExists = await confirmBookExists(req.body.bookId);
-  if (checkBookExists.hasOwnProperty("error")) {
-    res.status(500).json({
-      status: "Unable to locate the book using the provided id",
-      checkBookExists,
-    });
-    return;
-  }
   const checkPatronExists = await confirmPatronExists(req.body.patronId);
   if (checkPatronExists.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Unable to locate the patron",
       checkPatronExists,
+    });
+    return;
+  }
+  const checkOverdueBook = await checkOverdueStatus(req.body.patronId);
+  if (checkOverdueBook.hasOwnProperty("error")) {
+    res.status(500).json({
+      status: "Unable to take out another loan",
+      checkActiveLoans,
+    });
+    return;
+  }
+  const checkActiveLoans = await checkNumberOfActiveLoans(req.body.patronId);
+  if (checkActiveLoans.hasOwnProperty("error")) {
+    res.status(500).json({
+      status: "Unable to take out another loan",
+      checkActiveLoans,
+    });
+    return;
+  }
+  const checkBookExists = await confirmBookExists(req.body.bookId);
+  if (checkBookExists.hasOwnProperty("error")) {
+    res.status(500).json({
+      status: "Unable to locate the book using the provided id",
+      checkBookExists,
     });
     return;
   }
