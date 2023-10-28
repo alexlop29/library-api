@@ -9,6 +9,7 @@ import { ProfilingIntegration } from "@sentry/profiling-node";
 import { SENTRY_DSN } from "./config/environment";
 import { adminRoute } from "./routes/admin";
 import { bookRoute } from "./routes/book";
+import { loanRoute } from "./routes/loan";
 import { EXPRESS_PORT } from "./config/environment";
 
 const app = express();
@@ -45,6 +46,7 @@ app.get("/debug-sentry", function mainHandler(req, res) {
 
 app.use("/admin", adminRoute);
 app.use("/book", bookRoute);
+app.use("/loan", loanRoute);
 
 // The error handler must be registered before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());

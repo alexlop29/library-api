@@ -20,7 +20,7 @@ const confirmBookExists = async (bookId: String) => {
     if (!LocatedBook) {
       return { error: "Book not found" };
     }
-    return;
+    return LocatedBook;
   } catch (error) {
     Sentry.captureException(error.message);
     return { error: error.message };
@@ -38,6 +38,7 @@ const confirmPatronExists = async (patronId: String) => {
     if (!LocatedPatron) {
       return { error: "Patron not found" };
     }
+    return;
   } catch (error) {
     Sentry.captureException(error.message);
     return { error: error.message };
@@ -121,6 +122,7 @@ does not exist.
 
 // use type to confirm all necessary parameters are passed by the user
 loanRoute.post("/", async (req, res) => {
+  console.log(`checkPatronExists`);
   const checkPatronExists = await confirmPatronExists(req.body.patronId);
   if (checkPatronExists.hasOwnProperty("error")) {
     res.status(500).json({
@@ -129,6 +131,7 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
+  console.log(`checkOverdueBook`);
   const checkOverdueBook = await checkOverdueStatus(req.body.patronId);
   if (checkOverdueBook.hasOwnProperty("error")) {
     res.status(500).json({
@@ -137,6 +140,7 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
+  console.log(`checkActiveLoans`);
   const checkActiveLoans = await checkNumberOfActiveLoans(req.body.patronId);
   if (checkActiveLoans.hasOwnProperty("error")) {
     res.status(500).json({
@@ -145,6 +149,7 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
+  console.log(`checkBookExists`);
   const checkBookExists = await confirmBookExists(req.body.bookId);
   if (checkBookExists.hasOwnProperty("error")) {
     res.status(500).json({
@@ -153,6 +158,7 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
+  console.log(`checkLoanAvailability`);
   const checkLoanAvailability = await confirmLoanAvailability(req.body.bookId);
   if (checkLoanAvailability.hasOwnProperty("error")) {
     res.status(500).json({
@@ -161,6 +167,7 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
+  console.log(`startLoan`);
   const startLoan = await processBookLoan();
   if (startLoan.hasOwnProperty("error")) {
     res.status(500).json({
@@ -171,3 +178,5 @@ loanRoute.post("/", async (req, res) => {
   }
   res.status(200).json(startLoan);
 });
+
+export { loanRoute };
