@@ -14,8 +14,11 @@ const patron = patronModel;
 
 const getActiveLoans = async (patronId: String) => {
   try {
-    const activeLoans = await loan.find({ patronId: patronId, isReturned: false });
-    if (activeLoans == []){
+    const activeLoans = await loan.find({
+      patronId: patronId,
+      isReturned: false,
+    });
+    if (activeLoans == []) {
       return { status: "No active loans under the provided patron id" };
     }
     return activeLoans;
@@ -89,6 +92,19 @@ const checkOverdueStatus = async (patronId: String) => {
   }
 };
 
+const getOverdueBooks = async () => {
+  try {
+    const currentDate = new Date();
+    const findOverdueBooks = await loan.find({
+      endTime: { $lt: currentDate },
+    });
+    return findOverdueBooks;
+  } catch (error) {
+    Sentry.captureException(error.message);
+    return { error: error.message };
+  }
+};
+
 const confirmLoanAvailability = async (bookId: String) => {
   try {
     const bookAvailability = await loan.findOne({
@@ -128,7 +144,9 @@ const processBookLoan = async (bookId: String, patronId: String) => {
 const returnBook = async (bookId: String, patronId: String) => {
   const query = { bookId: bookId, patronId: patronId };
   try {
-    const returnedBook = await loan.findOneAndUpdate(query, { $set: { isReturned: true }});
+    const returnedBook = await loan.findOneAndUpdate(query, {
+      $set: { isReturned: true },
+    });
     if (returnedBook == null) {
       return { error: "Unable to locate the book loan" };
     }
@@ -217,15 +235,26 @@ loanRoute.post("/return", async (req, res) => {
   res.status(200).json(requestBookReturn);
 });
 
+loanRoute.get("/overdue", async (req, res) => {
+    const getAllOverdueBooks = await getOverdueBooks();
+    if (getAllOverdueBooks.hasOwnProperty("error")) {
+      res.status(500).json({
+        status: "Unable to retrieve all overdue loans",
+        getAllOverdueBooks,
+      });
+    }
+    res.status(200).json(getAllOverdueBooks);
+  });
+
 loanRoute.get("/:patronId", async (req, res) => {
   const requestActiveLoans = await getActiveLoans(req.params.patronId);
   if (requestActiveLoans.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Unable to retrieve active loans",
-      requestActiveLoans
+      requestActiveLoans,
     });
     return;
-  };
+  }
   res.status(200).json(requestActiveLoans);
 });
 
