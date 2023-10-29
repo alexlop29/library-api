@@ -12,8 +12,6 @@ const loan = loanModel;
 const book = bookModel;
 const patron = patronModel;
 
-//       unique: true, //prevents checking out a book that is already out(?)
-
 const confirmBookExists = async (bookId: String) => {
   try {
     const LocatedBook = await book.findOne({ _id: bookId });
@@ -38,7 +36,7 @@ const confirmPatronExists = async (patronId: String) => {
     if (!LocatedPatron) {
       return { error: "Patron not found" };
     }
-    return;
+    return LocatedPatron;
   } catch (error) {
     Sentry.captureException(error.message);
     return { error: error.message };
@@ -54,6 +52,7 @@ const checkNumberOfActiveLoans = async (patronId: String) => {
     if (countOfLoans > 3) {
       return { error: "Too many active loans" };
     }
+    return countOfLoans;
   } catch (error) {
     Sentry.captureException(error.message);
     return { error: error.message };
@@ -67,9 +66,10 @@ const checkOverdueStatus = async (patronId: String) => {
       patronId: patronId,
       endTime: { $lt: currentDate },
     });
-    if (findOverdueBook) {
+    if (findOverdueBook != null) {
       return { error: "Located an overdue book" };
     }
+    return { status: "No overdue books" };
   } catch (error) {
     Sentry.captureException(error.message);
     return { error: error.message };
@@ -82,9 +82,10 @@ const confirmLoanAvailability = async (bookId: String) => {
       bookId: bookId,
       isReturned: false,
     });
-    if (bookAvailability) {
+    if (bookAvailability != null) {
       return { error: "Book is unavailable" };
     }
+    return { status: "The requested book is available" };
   } catch (error) {
     Sentry.captureException(error.message);
     return { error: error.message };
@@ -94,7 +95,8 @@ const confirmLoanAvailability = async (bookId: String) => {
 const processBookLoan = async (bookId: String, patronId: String) => {
   try {
     const currentDate = new Date();
-    const dateInTwoWeeks = currentDate.getDate() + 14;
+    const dateInTwoWeeks = new Date(currentDate);
+    dateInTwoWeeks.setDate(currentDate.getDate() + 14);
     const requestBookLoan = new loan({
       startTime: currentDate,
       endTime: dateInTwoWeeks,
@@ -104,6 +106,20 @@ const processBookLoan = async (bookId: String, patronId: String) => {
     });
     await requestBookLoan.save();
     return requestBookLoan;
+  } catch (error) {
+    Sentry.captureException(error.message);
+    return { error: error.message };
+  }
+};
+
+const returnBook = async (bookId: String, patronId: String) => {
+  const query = { bookId: bookId, patronId: patronId };
+  try {
+    const returnedBook = loan.findOne(query, { isReturned: true });
+    if (returnedBook == null) {
+      return { error: "Unable to locate the book loan" };
+    }
+    return returnedBook;
   } catch (error) {
     Sentry.captureException(error.message);
     return { error: error.message };
@@ -122,7 +138,6 @@ does not exist.
 
 // use type to confirm all necessary parameters are passed by the user
 loanRoute.post("/", async (req, res) => {
-  console.log(`checkPatronExists`);
   const checkPatronExists = await confirmPatronExists(req.body.patronId);
   if (checkPatronExists.hasOwnProperty("error")) {
     res.status(500).json({
@@ -131,7 +146,6 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
-  console.log(`checkOverdueBook`);
   const checkOverdueBook = await checkOverdueStatus(req.body.patronId);
   if (checkOverdueBook.hasOwnProperty("error")) {
     res.status(500).json({
@@ -140,7 +154,6 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
-  console.log(`checkActiveLoans`);
   const checkActiveLoans = await checkNumberOfActiveLoans(req.body.patronId);
   if (checkActiveLoans.hasOwnProperty("error")) {
     res.status(500).json({
@@ -149,7 +162,6 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
-  console.log(`checkBookExists`);
   const checkBookExists = await confirmBookExists(req.body.bookId);
   if (checkBookExists.hasOwnProperty("error")) {
     res.status(500).json({
@@ -158,7 +170,6 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
-  console.log(`checkLoanAvailability`);
   const checkLoanAvailability = await confirmLoanAvailability(req.body.bookId);
   if (checkLoanAvailability.hasOwnProperty("error")) {
     res.status(500).json({
@@ -167,8 +178,7 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
-  console.log(`startLoan`);
-  const startLoan = await processBookLoan();
+  const startLoan = await processBookLoan(req.body.bookId, req.body.patronId);
   if (startLoan.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Unable to loan the requested item",
@@ -177,6 +187,21 @@ loanRoute.post("/", async (req, res) => {
     return;
   }
   res.status(200).json(startLoan);
+});
+
+loanRoute.post("/return", async (req, res) => {
+  const requestBookReturn = await returnBook(
+    req.body.bookId,
+    req.body.patronId,
+  );
+  if (requestBookReturn.hasOwnProperty("error")) {
+    res.status(500).json({
+      status: "Unable to loan the requested item",
+      requestBookReturn,
+    });
+    return;
+  }
+  res.status(200).json(requestBookReturn);
 });
 
 export { loanRoute };
