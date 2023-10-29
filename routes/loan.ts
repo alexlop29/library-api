@@ -12,6 +12,19 @@ const loan = loanModel;
 const book = bookModel;
 const patron = patronModel;
 
+const getActiveLoans = async (patronId: String) => {
+  try {
+    const activeLoans = await loan.find({ patronId: patronId, isReturned: false });
+    if (activeLoans == []){
+      return { status: "No active loans under the provided patron id" };
+    }
+    return activeLoans;
+  } catch (error) {
+    Sentry.captureException(error.message);
+    return { error: error.message };
+  }
+};
+
 const confirmBookExists = async (bookId: String) => {
   try {
     const LocatedBook = await book.findOne({ _id: bookId });
@@ -115,7 +128,7 @@ const processBookLoan = async (bookId: String, patronId: String) => {
 const returnBook = async (bookId: String, patronId: String) => {
   const query = { bookId: bookId, patronId: patronId };
   try {
-    const returnedBook = loan.findOne(query, { isReturned: true });
+    const returnedBook = await loan.findOneAndUpdate(query, { $set: { isReturned: true }});
     if (returnedBook == null) {
       return { error: "Unable to locate the book loan" };
     }
@@ -196,12 +209,24 @@ loanRoute.post("/return", async (req, res) => {
   );
   if (requestBookReturn.hasOwnProperty("error")) {
     res.status(500).json({
-      status: "Unable to loan the requested item",
+      status: "Unable to return the requested item",
       requestBookReturn,
     });
     return;
   }
   res.status(200).json(requestBookReturn);
+});
+
+loanRoute.get("/:patronId", async (req, res) => {
+  const requestActiveLoans = await getActiveLoans(req.params.patronId);
+  if (requestActiveLoans.hasOwnProperty("error")) {
+    res.status(500).json({
+      status: "Unable to retrieve active loans",
+      requestActiveLoans
+    });
+    return;
+  };
+  res.status(200).json(requestActiveLoans);
 });
 
 export { loanRoute };
