@@ -16,7 +16,7 @@ class Librarian {
 }
 
 class LibrarianController {
-  lib = librarianModel;
+  librarian = librarianModel;
 
   constructor() {}
 
@@ -28,7 +28,7 @@ return a 400 error.
 */
   async createLibrarian(librarian: Librarian): JSON {
     try {
-      let newLibrarian = new this.lib({
+      let newLibrarian = new this.librarian({
         firstName: librarian.firstName,
         lastName: librarian.lastName,
         email: librarian.email,
@@ -45,8 +45,21 @@ return a 400 error.
   // consider createing an error handling controller
   async getLibrarians(): JSON {
     try {
-      let allLibrarians = await this.lib.find({});
+      let allLibrarians = await this.librarian.find({});
       return allLibrarians;
+    } catch (error) {
+      Sentry.captureException(error.message);
+      return { error: error.message };
+    }
+  }
+
+  async getLibrarianId(email: String) {
+    try {
+      const locatedLibrarian = await this.librarian.findOne({ email: email });
+      if (!locatedLibrarian) {
+        return { error: "Librarian not found for the provided email" };
+      }
+      return locatedLibrarian._id;
     } catch (error) {
       Sentry.captureException(error.message);
       return { error: error.message };

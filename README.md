@@ -44,3 +44,14 @@ platform: expressjs (nodejs)
 
 Migrate functions to another folder, separate from the routes
 Extract error handling to a specific shared function - Include 404, 400s
+
+- Need to implement better error handling
+- Need to remediate ts checks
+- Need to write tests
+- Need to convert postman collection
+- Need to update the README
+- Need to create CI/CD tests
+
+Issues
+
+- Introduce pagination for getAll routes

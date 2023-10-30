@@ -1,64 +1,17 @@
 //@ts-nocheck
 import express from "express";
-import { bookModel } from "../models/book";
 import * as Sentry from "@sentry/node";
-import { librarianModel } from "../models/librarian";
+import { LibrarianController } from "../controllers/librarian";
+import { BookController, Book } from "../controllers/book";
 
 const bookRoute = express.Router();
 bookRoute.use(express.json());
 
-const book = bookModel;
-const librarian = librarianModel;
-
-const createBook = async (isbn, librarianId) => {
-  try {
-    const newBook = new book({
-      isbn: isbn,
-      librarianId: librarianId,
-    });
-    await newBook.save();
-    return newBook;
-  } catch (error) {
-    Sentry.captureException(error.message);
-    return { error: error.message };
-  }
-};
-
-const deleteBook = async (bookId) => {
-  try {
-    const removeBook = await book.deleteOne({ _id: bookId });
-    return removeBook;
-  } catch (error) {
-    Sentry.captureException(error.message);
-    return { error: error.message };
-  }
-};
-
-const retrieveLibrarianId = async (email: string) => {
-  try {
-    const locatedLibrarian = await librarian.findOne({ email: email });
-    if (!locatedLibrarian) {
-      return { error: "Librarian not found for the provided email" };
-    }
-    return locatedLibrarian._id;
-  } catch (error) {
-    Sentry.captureException(error.message);
-    return { error: error.message };
-  }
-};
-
-const getBooks = async () => {
-  try {
-    const allBooks = await book.find({});
-    return allBooks;
-  } catch (error) {
-    Sentry.captureException(error.message);
-    return { error: error.message };
-  }
-};
+const LibrarianController = LibrarianController;
+const BookController = BookController;
 
 bookRoute.get("/", async (req, res) => {
-  const returnedBooks = await getBooks();
+  const returnedBooks = await BookController.getBooks();
   if (returnedBooks.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Failed to get all books",
@@ -77,7 +30,9 @@ NOTE: (alopez) Consider improving error handling by querying for a `validation` 
 return a 400 error.
 */
 bookRoute.post("/", async (req, res) => {
-  const getLibrarianCredentials = await retrieveLibrarianId(req.body.email);
+  const getLibrarianCredentials = await LibrarianController.retrieveLibrarianId(
+    req.body.email,
+  );
   if (getLibrarianCredentials.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Unable to verify librarian credentials",
@@ -85,7 +40,8 @@ bookRoute.post("/", async (req, res) => {
     });
     return;
   }
-  const addBook = await createBook(req.body.isbn, getLibrarianCredentials);
+  const newBook = new Book(req.body.isbn, getLibrarianCredentials);
+  const addBook = await BookController.createBook(newBook);
   if (addBook.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Unable to create a new book entry",
@@ -96,8 +52,12 @@ bookRoute.post("/", async (req, res) => {
   res.status(200).json(addBook);
 });
 
+// Need to validate librarian identity
+// Need more validations!
+// Only a librarian should be allowed
+// create a book, remove a book, etc.
 bookRoute.delete("/:bookId", async (req, res) => {
-  const removedBook = await deleteBook(req.params.bookId);
+  const removedBook = await BookController.deleteBook(req.params.bookId);
   if (removedBook.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Unable to remove book",
