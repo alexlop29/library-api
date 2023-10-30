@@ -1,48 +1,14 @@
 //@ts-nocheck
 import express from "express";
-import { patronModel } from "../models/patron";
 import * as Sentry from "@sentry/node";
 import { LibrarianController, Librarian } from "../controllers/librarian";
-
-type patron = {
-  firstName: String;
-  lastName: String;
-  email: String;
-  status: Boolean;
-};
+import { Patron, PatronController } from "../controllers/patron";
 
 const adminRoute = express.Router();
 adminRoute.use(express.json());
 
-const patron = patronModel;
-
-const createPatron = async (req) => {
-  try {
-    let newPatron = new patron({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      status: true,
-    });
-    await newPatron.save();
-    return newPatron;
-  } catch (error) {
-    Sentry.captureException(error.message);
-    return { error: error.message };
-  }
-};
-
-const getPatrons = async () => {
-  try {
-    let allPatrons = await patron.find({});
-    return allPatrons;
-  } catch (error) {
-    Sentry.captureException(error.message);
-    return { error: error.message };
-  }
-};
-
 const lib = new LibrarianController();
+const pat = new PatronController();
 
 adminRoute.get("/librarians", async (req, res) => {
   const returnedLibrarians = await lib.getLibrarians();
@@ -80,7 +46,7 @@ adminRoute.post("/librarian", async (req, res) => {
 });
 
 adminRoute.get("/patrons", async (req, res) => {
-  const returnedPatrons = await getPatrons();
+  const returnedPatrons = await pat.getPatrons();
   if (returnedPatrons.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Failed to get all patrons",
@@ -94,12 +60,13 @@ adminRoute.get("/patrons", async (req, res) => {
   }
 });
 
-/*
-NOTE: (alopez) Consider improving error handling by querying for a `validation` to
-return a 400 error.
-*/
 adminRoute.post("/patron", async (req, res) => {
-  const addPatron = await createPatron(req);
+  const newPatron = new Patron(
+    req.body.firstName,
+    req.body.lastName,
+    req.body.email,
+  );
+  const addPatron = await pat.createPatron(newPatron);
   if (addPatron.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Failed to add a new patron",
