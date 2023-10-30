@@ -8,12 +8,12 @@ import { BookController } from "../controllers/book";
 const loanRoute = express.Router();
 loanRoute.use(express.json());
 
-const LoanController = LoanController;
-const PatronController = PatronController;
-const BookController = BookController;
+const loanController = new LoanController();
+const patronController = new PatronController();
+const bookController = new BookController();
 
 loanRoute.post("/", async (req, res) => {
-  const checkPatronExists = await PatronController.getPatronById(
+  const checkPatronExists = await patronController.getPatronById(
     req.body.patronId,
   );
   if (checkPatronExists.hasOwnProperty("error")) {
@@ -23,7 +23,7 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
-  const checkOverdueBook = await LoanController.getOverdueStatusByPatronId(
+  const checkOverdueBook = await loanController.getOverdueStatusByPatronId(
     req.body.patronId,
   );
   if (checkOverdueBook.hasOwnProperty("error")) {
@@ -33,7 +33,7 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
-  const checkActiveLoans = await LoanController.getCountOfActiveLoansByPatronId(
+  const checkActiveLoans = await loanController.getCountOfActiveLoansByPatronId(
     req.body.patronId,
   );
   if (checkActiveLoans.hasOwnProperty("error")) {
@@ -43,7 +43,7 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
-  const checkBookExists = await BookController.getBookById(req.body.bookId);
+  const checkBookExists = await bookController.getBookById(req.body.bookId);
   if (checkBookExists.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Unable to locate the book using the provided id",
@@ -51,7 +51,7 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
-  const checkLoanAvailability = await LoanController.getLoanAvailability(
+  const checkLoanAvailability = await loanController.getLoanAvailability(
     req.body.bookId,
   );
   if (checkLoanAvailability.hasOwnProperty("error")) {
@@ -61,7 +61,7 @@ loanRoute.post("/", async (req, res) => {
     });
     return;
   }
-  const startLoan = await LoanController.requestBookLoan(
+  const startLoan = await loanController.requestBookLoan(
     req.body.bookId,
     req.body.patronId,
   );
@@ -76,7 +76,7 @@ loanRoute.post("/", async (req, res) => {
 });
 
 loanRoute.post("/return", async (req, res) => {
-  const requestBookReturn = await LoanController.returnBookLoan(
+  const requestBookReturn = await loanController.returnBookLoan(
     req.body.bookId,
     req.body.patronId,
   );
@@ -91,7 +91,7 @@ loanRoute.post("/return", async (req, res) => {
 });
 
 loanRoute.get("/overdue", async (req, res) => {
-  const getAllOverdueBooks = await LoanController.getAllOverdueBooks();
+  const getAllOverdueBooks = await loanController.getAllOverdueBooks();
   if (getAllOverdueBooks.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Unable to retrieve all overdue loans",
@@ -102,7 +102,7 @@ loanRoute.get("/overdue", async (req, res) => {
 });
 
 loanRoute.get("/:patronId", async (req, res) => {
-  const requestActiveLoans = await LoanController.getActiveLoansByPatronId(
+  const requestActiveLoans = await loanController.getActiveLoansByPatronId(
     req.params.patronId,
   );
   if (requestActiveLoans.hasOwnProperty("error")) {

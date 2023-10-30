@@ -7,11 +7,11 @@ import { BookController, Book } from "../controllers/book";
 const bookRoute = express.Router();
 bookRoute.use(express.json());
 
-const LibrarianController = LibrarianController;
-const BookController = BookController;
+const librarianController = new LibrarianController();
+const bookController = new BookController();
 
 bookRoute.get("/", async (req, res) => {
-  const returnedBooks = await BookController.getBooks();
+  const returnedBooks = await bookController.getBooks();
   if (returnedBooks.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Failed to get all books",
@@ -30,7 +30,7 @@ NOTE: (alopez) Consider improving error handling by querying for a `validation` 
 return a 400 error.
 */
 bookRoute.post("/", async (req, res) => {
-  const getLibrarianCredentials = await LibrarianController.retrieveLibrarianId(
+  const getLibrarianCredentials = await librarianController.retrieveLibrarianId(
     req.body.email,
   );
   if (getLibrarianCredentials.hasOwnProperty("error")) {
@@ -41,7 +41,7 @@ bookRoute.post("/", async (req, res) => {
     return;
   }
   const newBook = new Book(req.body.isbn, getLibrarianCredentials);
-  const addBook = await BookController.createBook(newBook);
+  const addBook = await bookController.createBook(newBook);
   if (addBook.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Unable to create a new book entry",
@@ -57,7 +57,7 @@ bookRoute.post("/", async (req, res) => {
 // Only a librarian should be allowed
 // create a book, remove a book, etc.
 bookRoute.delete("/:bookId", async (req, res) => {
-  const removedBook = await BookController.deleteBook(req.params.bookId);
+  const removedBook = await bookController.deleteBook(req.params.bookId);
   if (removedBook.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Unable to remove book",

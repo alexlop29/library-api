@@ -14,6 +14,9 @@ npm install --save-dev eslint
 npm install --save @sentry/node @sentry/profiling-node
 npm install --save-dev jest
 npm install --save-dev @babel/preset-typescript
+npm install --save-dev jest
+npm i --save-dev @types/jest
+npm install mongodb-memory-server --save-dev
 ```
 
 ## Running the application
