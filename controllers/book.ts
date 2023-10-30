@@ -26,6 +26,19 @@ class BookController {
     }
   }
 
+  async getBookById(bookId: String) {
+    try {
+      const LocatedBook = await this.book.findOne({ _id: bookId });
+      if (!LocatedBook) {
+        return { error: "Book not found" };
+      }
+      return LocatedBook;
+    } catch (error) {
+      Sentry.captureException(error.message);
+      return { error: error.message };
+    }
+  }
+
   async createBook(book: Book) {
     try {
       const newBook = new this.book({
