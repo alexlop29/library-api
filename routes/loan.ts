@@ -236,15 +236,15 @@ loanRoute.post("/return", async (req, res) => {
 });
 
 loanRoute.get("/overdue", async (req, res) => {
-    const getAllOverdueBooks = await getOverdueBooks();
-    if (getAllOverdueBooks.hasOwnProperty("error")) {
-      res.status(500).json({
-        status: "Unable to retrieve all overdue loans",
-        getAllOverdueBooks,
-      });
-    }
-    res.status(200).json(getAllOverdueBooks);
-  });
+  const getAllOverdueBooks = await getOverdueBooks();
+  if (getAllOverdueBooks.hasOwnProperty("error")) {
+    res.status(500).json({
+      status: "Unable to retrieve all overdue loans",
+      getAllOverdueBooks,
+    });
+  }
+  res.status(200).json(getAllOverdueBooks);
+});
 
 loanRoute.get("/:patronId", async (req, res) => {
   const requestActiveLoans = await getActiveLoans(req.params.patronId);

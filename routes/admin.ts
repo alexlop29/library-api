@@ -1,14 +1,8 @@
 //@ts-nocheck
 import express from "express";
-import { librarianModel } from "../models/librarian";
 import { patronModel } from "../models/patron";
 import * as Sentry from "@sentry/node";
-
-type librarian = {
-  firstName: String;
-  lastName: String;
-  email: String;
-};
+import { LibrarianController, Librarian } from "../controllers/librarian";
 
 type patron = {
   firstName: String;
@@ -20,33 +14,7 @@ type patron = {
 const adminRoute = express.Router();
 adminRoute.use(express.json());
 
-const librarian = librarianModel;
 const patron = patronModel;
-
-const createLibrarian = async (req) => {
-  try {
-    let newLibrarian = new librarian({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-    });
-    await newLibrarian.save();
-    return newLibrarian;
-  } catch (error) {
-    Sentry.captureException(error.message);
-    return { error: error.message };
-  }
-};
-
-const getLibrarians = async () => {
-  try {
-    let allLibrarians = await librarian.find({});
-    return allLibrarians;
-  } catch (error) {
-    Sentry.captureException(error.message);
-    return { error: error.message };
-  }
-};
 
 const createPatron = async (req) => {
   try {
@@ -74,8 +42,10 @@ const getPatrons = async () => {
   }
 };
 
+const lib = new LibrarianController();
+
 adminRoute.get("/librarians", async (req, res) => {
-  const returnedLibrarians = await getLibrarians();
+  const returnedLibrarians = await lib.getLibrarians();
   if (returnedLibrarians.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Failed to get all librarians",
@@ -89,12 +59,13 @@ adminRoute.get("/librarians", async (req, res) => {
   }
 });
 
-/*
-NOTE: (alopez) Consider improving error handling by querying for a `validation` to
-return a 400 error.
-*/
 adminRoute.post("/librarian", async (req, res) => {
-  const addLibrarian = await createLibrarian(req);
+  const newLibrarian = new Librarian(
+    req.body.firstName,
+    req.body.lastName,
+    req.body.email,
+  );
+  const addLibrarian = await lib.createLibrarian(newLibrarian);
   if (addLibrarian.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Failed to add a new librarian",
