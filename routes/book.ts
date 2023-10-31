@@ -1,10 +1,13 @@
 //@ts-nocheck
 import express from "express";
 import * as Sentry from "@sentry/node";
+
 import { LibrarianController } from "../controllers/librarian";
 import { BookController, Book } from "../controllers/book";
 
 const bookRoute = express.Router();
+
+
 bookRoute.use(express.json());
 
 const librarianController = new LibrarianController();
@@ -14,8 +17,8 @@ bookRoute.get("/", async (req, res) => {
   const returnedBooks = await bookController.getBooks();
   if (returnedBooks.hasOwnProperty("error")) {
     res.status(500).json({
-      status: "Failed to get all books",
-      returnedBooks,
+        status: "Failed to get all books",
+        returnedBooks,
     });
   } else {
     res.status(200).json({
@@ -35,7 +38,7 @@ bookRoute.post("/", async (req, res) => {
   );
   if (getLibrarianCredentials.hasOwnProperty("error")) {
     res.status(500).json({
-      status: "Unable to verify librarian credentials",
+        status: "Unable to verify librarian credentials",
       getLibrarianCredentials,
     });
     return;
@@ -52,16 +55,13 @@ bookRoute.post("/", async (req, res) => {
   res.status(200).json(addBook);
 });
 
-// Need to validate librarian identity
-// Need more validations!
-// Only a librarian should be allowed
-// create a book, remove a book, etc.
+
 bookRoute.delete("/:bookId", async (req, res) => {
   const removedBook = await bookController.deleteBook(req.params.bookId);
   if (removedBook.hasOwnProperty("error")) {
     res.status(500).json({
-      status: "Unable to remove book",
-      removedBook,
+        status: "Unable to remove book",
+  removedBook,
     });
     return;
   }
@@ -69,3 +69,5 @@ bookRoute.delete("/:bookId", async (req, res) => {
 });
 
 export { bookRoute };
+
+
