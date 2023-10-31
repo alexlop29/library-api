@@ -60,8 +60,8 @@ bookRoute.delete("/:bookId", async (req, res) => {
   const removedBook = await bookController.deleteBook(req.params.bookId);
   if (removedBook.hasOwnProperty("error")) {
     res.status(500).json({
-      status: "Unable to remove book",
-      removedBook,
+        status: "Unable to remove book",
+  removedBook,
     });
     return;
   }
