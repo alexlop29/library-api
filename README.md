@@ -39,7 +39,6 @@ Auto format
 npm run format
 ```
 
-Error Handling
 Application performance monitoring and error tracking is faciliated through Sentry.
 ![Sentry](./tmp/sentrySample.png)
 
