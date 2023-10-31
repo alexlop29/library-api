@@ -54,10 +54,7 @@ bookRoute.post("/", async (req, res) => {
   res.status(200).json(addBook);
 });
 
-// Need to validate librarian identity
-// Need more validations!
-// Only a librarian should be allowed
-// create a book, remove a book, etc.
+
 bookRoute.delete("/:bookId", async (req, res) => {
   const removedBook = await bookController.deleteBook(req.params.bookId);
   if (removedBook.hasOwnProperty("error")) {
