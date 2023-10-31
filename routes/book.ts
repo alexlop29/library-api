@@ -14,8 +14,8 @@ bookRoute.get("/", async (req, res) => {
   const returnedBooks = await bookController.getBooks();
   if (returnedBooks.hasOwnProperty("error")) {
     res.status(500).json({
-      status: "Failed to get all books",
-      returnedBooks,
+        status: "Failed to get all books",
+        returnedBooks,
     });
   } else {
     res.status(200).json({
