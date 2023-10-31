@@ -1,10 +1,10 @@
-name: eslint
+name: jest
 
 on:
   pull_request
 
 jobs:
-  eslint:
+  jest:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,5 +16,5 @@ jobs:
       - name: Install modules
         run: npm install
 
-      - name: Run ESLint
-        run: eslint . --ext .js,.jsx,.ts,.tsx
+      - name: Run jest
+        run: npm test
