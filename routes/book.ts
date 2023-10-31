@@ -35,7 +35,7 @@ bookRoute.post("/", async (req, res) => {
   );
   if (getLibrarianCredentials.hasOwnProperty("error")) {
     res.status(500).json({
-      status: "Unable to verify librarian credentials",
+        status: "Unable to verify librarian credentials",
       getLibrarianCredentials,
     });
     return;
