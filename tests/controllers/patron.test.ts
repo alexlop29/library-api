@@ -23,7 +23,6 @@ test("adds a new patron", async () => {
     fakePatronWithoutLoans.email,
   );
   const createPatron = await patron.createPatron(newPatron);
-  console.log(createPatron);
   expect(createPatron.firstName).toEqual(fakePatronWithoutLoans.firstName);
   expect(createPatron.lastName).toEqual(fakePatronWithoutLoans.lastName);
   expect(createPatron.email).toEqual(fakePatronWithoutLoans.email);

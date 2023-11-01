@@ -2,6 +2,7 @@
 import { patronModel } from "../models/patron";
 import { librarianModel } from "../models/librarian";
 import { bookModel } from "../models/book";
+import { loanModel } from "../models/loan";
 import { mongoose } from "../config/mongodb";
 
 const samplePatron = {
@@ -21,6 +22,16 @@ const sampleBook = {
   isbn: 1234567891111,
 };
 
+const currentDate = new Date();
+const dateInTwoWeeks = new Date(currentDate);
+dateInTwoWeeks.setDate(currentDate.getDate() + 14);
+
+const sampleLoan = {
+  startTime: currentDate,
+  endTime: dateInTwoWeeks,
+  isReturned: false,
+};
+
 module.exports = async function (globalConfig, projectConfig) {
   await mongoose.connection.dropCollection("patrons");
   await mongoose.connection.dropCollection("librarians");
@@ -35,4 +46,14 @@ module.exports = async function (globalConfig, projectConfig) {
   };
   const bookInfo = bookModel(newBook);
   await bookInfo.save();
+  const newLoan = {
+    startTime: sampleLoan.startTime,
+    endTime: sampleLoan.endTime,
+    bookId: bookInfo._id,
+    patronId: patronInfo._id,
+    isReturned: sampleLoan.isReturned,
+  };
+  const loanInfo = loanModel(newLoan);
+  await loanInfo.save();
+  console.log(loanInfo);
 };
