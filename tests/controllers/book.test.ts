@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { BookController, Book } from "../../controllers/book";
 
 const fakeBook = {
@@ -18,7 +19,7 @@ test("adds a new book", async () => {
 
 test("retrieves all books", async () => {
   const getAllBooks = await book.getBooks();
-  getAllBooks.forEach(item => {
+  getAllBooks.forEach((item) => {
     expect(item.isbn).toEqual(expect.any(Number));
     expect(item.librarianId.toString()).toEqual(expect.any(String));
   });
@@ -31,5 +32,7 @@ test("retrieves a book by id", async () => {
 
 test("fails when retrieving a book not in the library", async () => {
   const getBookById = await book.getBookById(nonexistingFakeBookId);
-  expect(getBookById.error).toContain(`failed for value "${nonexistingFakeBookId}"`);
+  expect(getBookById.error).toContain(
+    `failed for value "${nonexistingFakeBookId}"`,
+  );
 });

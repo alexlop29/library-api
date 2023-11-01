@@ -24,7 +24,7 @@ class PatronController {
 
   // Analyze returned element; for type check
   // consider createing an error handling controller
-  async getPatrons(): JSON {
+  async getPatrons() {
     try {
       let allPatrons = await this.patron.find({});
       return allPatrons;
@@ -53,7 +53,7 @@ class PatronController {
 NOTE: (alopez) Consider improving error handling by querying for a `validation` to
 return a 400 error.
 */
-  async createPatron(patron: Patron): JSON {
+  async createPatron(patron: Patron) {
     try {
       let newPatron = new this.patron({
         firstName: patron.firstName,

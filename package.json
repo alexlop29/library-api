@@ -37,7 +37,7 @@
     "format": "npx prettier . --write",
     "prepublish": "npm run build",
     "sentry:sourcemaps": "sentry-cli sourcemaps inject --org alexander-lopez --project node-express ./build && sentry-cli sourcemaps upload --org alexander-lopez --project node-express ./build",
-    "test": "jest --detectOpenHandles"
+    "test": "jest --detectOpenHandles --config ./tests/jest.config.json"
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",

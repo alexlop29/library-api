@@ -1,20 +1,18 @@
-import { MongoMemoryServer } from "mongodb-memory-server";
-import * as mongoose from "mongoose";
-import config from "./config";
+//@ts-nocheck
+import { patronModel } from "../models/patron";
+import { mongoose } from "../config/mongodb";
 
-const globalSetup = async () => {
-  if (config.Memory) {
-    const instance = await MongoMemoryServer.create();
-    const uri = instance.getUri();
-    (global as any).__MONGOINSTANCE = instance;
-    process.env.MONGO_URI = uri.slice(0, uri.lastIndexOf("/"));
-  } else {
-    process.env.MONGO_URI = `mongodb://${config.IP}:${config.Port}`;
-  }
-
-  await mongoose.connect(`${process.env.MONGO_URI}/${config.Database}`);
-  await mongoose.connection.db.dropDatabase();
-  await mongoose.disconnect();
+const fakePatronWithLoans = {
+  firstName: "Jelly",
+  lastName: "Beans",
+  email: "jellybeans@gmail.com",
+  status: true,
 };
 
-export { globalSetup };
+module.exports = async function (globalConfig, projectConfig) {
+  console.log(`hi alex`);
+  await mongoose.connection.dropCollection("patrons");
+  const patronInfo = patronModel(fakePatronWithLoans);
+  await patronInfo.save();
+  console.log(patronInfo);
+};

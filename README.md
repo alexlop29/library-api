@@ -49,6 +49,5 @@ Application performance monitoring and error tracking is faciliated through Sent
 
 ## 🚧 To Do
 
-- Implement better error handling
 - Remediate ts checks
 - Write tests
