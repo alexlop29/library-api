@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { PatronController, Patron } from "../../controllers/patron";
 import { patronModel } from "../../models/patron";
-import { getSamplePatron } from "../utils/getSamplePatron";
+import { getSamplePatronId } from "../utils/getSamplePatronId";
 
 const fakePatronWithoutLoans = {
   firstName: "Ben",
@@ -24,7 +24,7 @@ test("adds a new patron", async () => {
 });
 
 test("retrieves a patron by id", async () => {
-  const samplePatronId = await getSamplePatron();
+  const samplePatronId = await getSamplePatronId();
   const getPatronInfo = await patron.getPatronById(samplePatronId);
   expect(getPatronInfo.firstName).toEqual("Jelly");
 });

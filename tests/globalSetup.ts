@@ -55,5 +55,4 @@ module.exports = async function (globalConfig, projectConfig) {
   };
   const loanInfo = loanModel(newLoan);
   await loanInfo.save();
-  console.log(loanInfo);
 };
