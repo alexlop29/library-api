@@ -1,5 +1,4 @@
 import { PatronController, Patron } from "../../controllers/patron";
-// import { fakePatronWithLoansId } from "../globalSetup";
 
 const fakePatronWithoutLoans = {
   firstName: "Ben",

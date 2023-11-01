@@ -1,14 +1,18 @@
 //@ts-nocheck
 import { BookController, Book } from "../../controllers/book";
+import { bookModel } from "../../models/book";
 
 const fakeBook = {
   isbn: 1234567891111,
   librarianId: "653d47a4c811c0691340e0d4",
 };
-const existingFakeBookId = "6542a03c0247033919a7234b";
 const nonexistingFakeBookId = "123";
 
 const book = new BookController();
+const getSampleBook = async () => {
+  const sampleBook = await bookModel.findOne({ isbn: 1234567891111 });
+  return sampleBook._id;
+};
 
 test("adds a new book", async () => {
   const newBook = new Book(fakeBook.isbn, fakeBook.librarianId);
@@ -26,8 +30,9 @@ test("retrieves all books", async () => {
 });
 
 test("retrieves a book by id", async () => {
-  const getBookById = await book.getBookById(existingFakeBookId);
-  expect(getBookById._id.toString()).toEqual(existingFakeBookId);
+  const sampleBookId = await getSampleBook();
+  const getBookById = await book.getBookById(sampleBookId);
+  expect(getBookById.isbn).toEqual(1234567891111);
 });
 
 test("fails when retrieving a book not in the library", async () => {
