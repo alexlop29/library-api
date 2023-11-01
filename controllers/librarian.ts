@@ -43,7 +43,7 @@ return a 400 error.
 
   // Analyze returned element; for type check
   // consider createing an error handling controller
-  async getLibrarians(): JSON {
+  async getLibrarians() {
     try {
       let allLibrarians = await this.librarian.find({});
       return allLibrarians;
