@@ -40,6 +40,8 @@ class BookController {
     }
   }
 
+  // Need to add validation in the route to confirm the librarian exists
+// prior to creating the book;
   async createBook(book: Book) {
     try {
       const newBook = new this.book({

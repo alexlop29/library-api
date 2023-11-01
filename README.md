@@ -52,7 +52,3 @@ Application performance monitoring and error tracking is faciliated through Sent
 - Implement better error handling
 - Remediate ts checks
 - Write tests
-
-Future Improvements:
-
-- Introduce pagination for getAll routes
