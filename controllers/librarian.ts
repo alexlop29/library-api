@@ -26,7 +26,7 @@ class LibrarianController {
 NOTE: (alopez) Consider improving error handling by querying for a `validation` to
 return a 400 error.
 */
-  async createLibrarian(librarian: Librarian): JSON {
+  async createLibrarian(librarian: Librarian) {
     try {
       let newLibrarian = new this.librarian({
         firstName: librarian.firstName,
