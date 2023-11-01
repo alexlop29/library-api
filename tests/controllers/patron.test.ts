@@ -1,6 +1,7 @@
 //@ts-nocheck
 import { PatronController, Patron } from "../../controllers/patron";
 import { patronModel } from "../../models/patron";
+import { getSamplePatron } from "../utils/getSamplePatron";
 
 const fakePatronWithoutLoans = {
   firstName: "Ben",
@@ -9,12 +10,6 @@ const fakePatronWithoutLoans = {
 };
 
 const patron = new PatronController();
-const getSamplePatron = async () => {
-  const samplePatron = await patronModel.findOne({
-    email: "jellybeans@gmail.com",
-  });
-  return samplePatron._id;
-};
 
 test("adds a new patron", async () => {
   const newPatron = new Patron(
