@@ -12,3 +12,10 @@ test("retrieves active loans by the patron id", async () => {
   expect(activeLoans[0].bookId.toString()).toEqual(sampleBookId.toString());
   expect(activeLoans[0].patronId.toString()).toEqual(samplePatronId.toString());
 });
+
+test("retrieves count of active loans by the patron id", async () => {
+  const samplePatronId = await getSamplePatronId();
+  const countOfLoans =
+    await loan.getCountOfActiveLoansByPatronId(samplePatronId);
+  expect(typeof(countOfLoans)).toBe('number');
+});
