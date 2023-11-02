@@ -1,6 +1,4 @@
-//@ts-nocheck
 import express from "express";
-import * as Sentry from "@sentry/node";
 import { LoanController } from "../controllers/loan";
 import { PatronController } from "../controllers/patron";
 import { BookController } from "../controllers/book";
@@ -29,7 +27,7 @@ loanRoute.post("/", async (req, res) => {
   if (checkOverdueBook.hasOwnProperty("error")) {
     res.status(500).json({
       status: "Unable to take out another loan",
-      checkActiveLoans,
+      checkOverdueBook,
     });
     return;
   }

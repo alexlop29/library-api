@@ -1,6 +1,4 @@
-//@ts-nocheck
 import express from "express";
-import * as Sentry from "@sentry/node";
 import { LibrarianController } from "../controllers/librarian";
 import { BookController, Book } from "../controllers/book";
 
@@ -30,7 +28,7 @@ NOTE: (alopez) Consider improving error handling by querying for a `validation` 
 return a 400 error.
 */
 bookRoute.post("/", async (req, res) => {
-  const getLibrarianCredentials = await librarianController.retrieveLibrarianId(
+  const getLibrarianCredentials = await librarianController.getLibrarianId(
     req.body.email,
   );
   if (getLibrarianCredentials.hasOwnProperty("error")) {

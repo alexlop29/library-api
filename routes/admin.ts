@@ -1,6 +1,4 @@
-//@ts-nocheck
 import express from "express";
-import * as Sentry from "@sentry/node";
 import { LibrarianController, Librarian } from "../controllers/librarian";
 import { Patron, PatronController } from "../controllers/patron";
 
