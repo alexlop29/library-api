@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { patronModel } from "../models/patron";
+import { patronModel } from "../models";
 import * as Sentry from "@sentry/node";
 
 class Patron {

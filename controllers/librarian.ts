@@ -1,4 +1,4 @@
-import { librarianModel } from "../models/librarian";
+import { librarianModel } from "../models";
 import * as Sentry from "@sentry/node";
 
 class Librarian {

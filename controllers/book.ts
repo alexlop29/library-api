@@ -1,4 +1,4 @@
-import { bookModel } from "../models/book";
+import { bookModel } from "../models";
 import * as Sentry from "@sentry/node";
 
 class Book {

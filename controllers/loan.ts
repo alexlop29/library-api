@@ -1,4 +1,4 @@
-import { loanModel } from "../models/loan";
+import { loanModel } from "../models";
 import * as Sentry from "@sentry/node";
 
 class LoanController {
