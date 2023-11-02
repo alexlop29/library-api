@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { loanModel } from "../models/loan";
 import * as Sentry from "@sentry/node";
 
@@ -13,13 +12,17 @@ class LoanController {
         patronId: patronId,
         isReturned: false,
       });
-      if (activeLoans == []) {
+      if (activeLoans.length === 0) {
         return { status: "No active loans under the provided patron id" };
       }
       return activeLoans;
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 
@@ -34,8 +37,12 @@ class LoanController {
       }
       return countOfLoans;
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 
@@ -51,8 +58,12 @@ class LoanController {
       }
       return { status: "No overdue books" };
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 
@@ -64,8 +75,12 @@ class LoanController {
       });
       return findOverdueBooks;
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 
@@ -80,8 +95,12 @@ class LoanController {
       }
       return { status: "The requested book is available" };
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 
@@ -100,8 +119,12 @@ class LoanController {
       await requestBookLoan.save();
       return requestBookLoan;
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 
@@ -116,8 +139,12 @@ class LoanController {
       }
       return returnedBook;
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 }

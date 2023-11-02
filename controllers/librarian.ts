@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { librarianModel } from "../models/librarian";
 import * as Sentry from "@sentry/node";
 
@@ -36,8 +35,12 @@ return a 400 error.
       await newLibrarian.save();
       return newLibrarian;
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 
@@ -48,8 +51,12 @@ return a 400 error.
       let allLibrarians = await this.librarian.find({});
       return allLibrarians;
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 
@@ -61,8 +68,12 @@ return a 400 error.
       }
       return locatedLibrarian._id;
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 }

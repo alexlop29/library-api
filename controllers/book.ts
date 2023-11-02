@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { bookModel } from "../models/book";
 import * as Sentry from "@sentry/node";
 
@@ -22,8 +21,12 @@ class BookController {
       const allBooks = await this.book.find({});
       return allBooks;
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 
@@ -35,8 +38,12 @@ class BookController {
       }
       return LocatedBook;
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 
@@ -51,8 +58,12 @@ class BookController {
       await newBook.save();
       return newBook;
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 
@@ -65,8 +76,12 @@ class BookController {
       const removeBook = await this.book.deleteOne({ _id: bookId });
       return removeBook;
     } catch (error) {
-      Sentry.captureException(error.message);
-      return { error: error.message };
+      if (error instanceof Error) {
+        Sentry.captureException(error.message);
+      }
+      if (error instanceof Error) {
+        return { error: error.message };
+      }
     }
   }
 }
