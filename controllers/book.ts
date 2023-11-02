@@ -47,8 +47,6 @@ class BookController {
     }
   }
 
-  // Need to add validation in the route to confirm the librarian exists
-  // prior to creating the book;
   async createBook(book: Book) {
     try {
       const newBook = new this.book({
@@ -67,10 +65,6 @@ class BookController {
     }
   }
 
-  // Need to validate librarian identity
-  // Need more validations!
-  // Only a librarian should be allowed
-  // create a book, remove a book, etc.
   async deleteBook(bookId: String) {
     try {
       const removeBook = await this.book.deleteOne({ _id: bookId });
