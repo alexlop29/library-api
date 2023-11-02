@@ -48,4 +48,4 @@ Application performance monitoring and error tracking is faciliated through Sent
 ## 🚧 To Do
 
 - Update env configs to toggle between test and dev databases
-- Resolve the comments
+- Run ESLINT
