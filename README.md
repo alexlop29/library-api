@@ -41,6 +41,14 @@ npm run format
 
 Application performance monitoring and error tracking is faciliated through Sentry.
 
+## 🏭 Running Tests
+Toggle the `ENVIRONMENT` variable to `TEST`. 
+
+```
+npm test
+```
+
+
 ## Postman
 
 [Link to Postman Collection](https://app.getpostman.com/join-team?invite_code=f5fd634447abc7fe04a841e7d046c100)
