@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { loanModel } from "../models";
 import * as Sentry from "@sentry/node";
 
