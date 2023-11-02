@@ -8,7 +8,6 @@ class Patron {
   email: String;
   status: Boolean;
 
-  // NOTE: May want to add a validation to the schmea requiring ...@... for the email
   constructor(firstName: String, lastName: String, email: String) {
     this.firstName = firstName;
     this.lastName = lastName;
@@ -22,8 +21,6 @@ class PatronController {
 
   constructor() {}
 
-  // Analyze returned element; for type check
-  // consider createing an error handling controller
   async getPatrons() {
     try {
       let allPatrons = await this.patron.find({});
@@ -47,12 +44,6 @@ class PatronController {
     }
   }
 
-  // Analyze returned element; for type check
-  // consider createing an error handling controller
-  /*
-NOTE: (alopez) Consider improving error handling by querying for a `validation` to
-return a 400 error.
-*/
   async createPatron(patron: Patron) {
     try {
       let newPatron = new this.patron({

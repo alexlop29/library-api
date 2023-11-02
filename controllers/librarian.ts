@@ -6,7 +6,6 @@ class Librarian {
   lastName: String;
   email: String;
 
-  // NOTE: May want to add a validation to the schmea requiring ...@... for the email
   constructor(firstName: String, lastName: String, email: String) {
     this.firstName = firstName;
     this.lastName = lastName;
@@ -19,12 +18,6 @@ class LibrarianController {
 
   constructor() {}
 
-  // Analyze returned element; for type check
-  // consider createing an error handling controller
-  /*
-NOTE: (alopez) Consider improving error handling by querying for a `validation` to
-return a 400 error.
-*/
   async createLibrarian(librarian: Librarian) {
     try {
       let newLibrarian = new this.librarian({
@@ -44,8 +37,6 @@ return a 400 error.
     }
   }
 
-  // Analyze returned element; for type check
-  // consider createing an error handling controller
   async getLibrarians() {
     try {
       let allLibrarians = await this.librarian.find({});
