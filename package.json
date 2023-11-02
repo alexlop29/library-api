@@ -35,7 +35,7 @@
   "typings": "./lib/index.d.ts",
   "scripts": {
     "start-debug": "DEBUG=express:* nodemon ./app.ts",
-    "build": "tsc && yarn sentry:sourcemaps",
+    "build": "tsc",
     "lint": "tslint -c tslint.json src/**/*.ts",
     "eslint": "eslint .",
     "format": "npx prettier . --write",
