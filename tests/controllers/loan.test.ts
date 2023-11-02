@@ -19,3 +19,9 @@ test("retrieves count of active loans by the patron id", async () => {
     await loan.getCountOfActiveLoansByPatronId(samplePatronId);
   expect(typeof(countOfLoans)).toBe('number');
 });
+
+test("gets status of overdue books by the patron id", async () => {
+  const samplePatronId = await getSamplePatronId();
+  const overdueBooks = await loan.getOverdueStatusByPatronId(samplePatronId);
+  expect(JSON.stringify(overdueBooks)).toContain('No overdue books');
+});
