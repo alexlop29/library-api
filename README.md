@@ -4,8 +4,7 @@ Contains an API, developed with Node.js, Express.js, and Typescript, to simulate
 
 ### Database Design
 
-The following diagram provides an initial overview of the proposed database schema:
-![Database Design](./tmp/databaseDesign.png)
+`/tmp`` provides an initial overview of the proposed database schema.
 
 ## 🏄 Getting Started
 
@@ -41,7 +40,6 @@ npm run format
 ```
 
 Application performance monitoring and error tracking is faciliated through Sentry.
-![Sentry](./tmp/sentrySample.png)
 
 ## Postman
 

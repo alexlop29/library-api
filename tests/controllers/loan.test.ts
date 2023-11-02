@@ -17,13 +17,13 @@ test("retrieves count of active loans by the patron id", async () => {
   const samplePatronId = await getSamplePatronId();
   const countOfLoans =
     await loan.getCountOfActiveLoansByPatronId(samplePatronId);
-  expect(typeof(countOfLoans)).toBe('number');
+  expect(typeof countOfLoans).toBe("number");
 });
 
 test("gets status of overdue books by the patron id", async () => {
   const samplePatronId = await getSamplePatronId();
   const overdueBooks = await loan.getOverdueStatusByPatronId(samplePatronId);
-  expect(JSON.stringify(overdueBooks)).toContain('No overdue books');
+  expect(JSON.stringify(overdueBooks)).toContain("No overdue books");
 });
 
 test("retrieves all overdue books", async () => {
@@ -34,9 +34,5 @@ test("retrieves all overdue books", async () => {
 test("retrieves the availability of a book loan", async () => {
   const sampleBookId = await getSampleBookId();
   const bookAvailability = await loan.getLoanAvailability(sampleBookId);
-  expect(JSON.stringify(bookAvailability)).toContain('Book is unavailable');
-});
-
-test("processing a new book loan", async () => {
-  
+  expect(JSON.stringify(bookAvailability)).toContain("Book is unavailable");
 });
