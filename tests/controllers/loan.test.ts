@@ -25,3 +25,18 @@ test("gets status of overdue books by the patron id", async () => {
   const overdueBooks = await loan.getOverdueStatusByPatronId(samplePatronId);
   expect(JSON.stringify(overdueBooks)).toContain('No overdue books');
 });
+
+test("retrieves all overdue books", async () => {
+  const allOverdueBooks = await loan.getAllOverdueBooks();
+  expect(allOverdueBooks).toStrictEqual([]);
+});
+
+test("retrieves the availability of a book loan", async () => {
+  const sampleBookId = await getSampleBookId();
+  const bookAvailability = await loan.getLoanAvailability(sampleBookId);
+  expect(JSON.stringify(bookAvailability)).toContain('Book is unavailable');
+});
+
+test("processing a new book loan", async () => {
+  
+});
