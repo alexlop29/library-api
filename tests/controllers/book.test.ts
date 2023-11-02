@@ -1,12 +1,18 @@
-//@ts-nocheck
 import { BookController, Book } from "../../controllers/book";
 import { bookModel } from "../../models/book";
 
-const fakeBook = {
+const newSampleBook = {
   isbn: 1234567891111,
   librarianId: "653d47a4c811c0691340e0d4",
 };
 const nonexistingFakeBookId = "123";
+
+type BookDefinition = {
+  _id: Number;
+  isbn: Number;
+  librarianId: String;
+  __v: Number;
+};
 
 const book = new BookController();
 const getSampleBook = async () => {
@@ -15,7 +21,7 @@ const getSampleBook = async () => {
 };
 
 test("adds a new book", async () => {
-  const newBook = new Book(fakeBook.isbn, fakeBook.librarianId);
+  const newBook = new Book(newSampleBook.isbn, newSampleBook.librarianId);
   const createBook = await book.createBook(newBook);
   expect(createBook.isbn).toEqual(1234567891111);
   expect(createBook.librarianId.toString()).toEqual("653d47a4c811c0691340e0d4");
@@ -23,7 +29,7 @@ test("adds a new book", async () => {
 
 test("retrieves all books", async () => {
   const getAllBooks = await book.getBooks();
-  getAllBooks.forEach((item) => {
+  getAllBooks.forEach((item: BookDefinition) => {
     expect(item.isbn).toEqual(expect.any(Number));
     expect(item.librarianId.toString()).toEqual(expect.any(String));
   });
