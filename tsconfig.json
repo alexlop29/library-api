@@ -5,7 +5,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "lib": ["es2015"],
-    "rootDir": "src",
+    "baseUrl": "./",
     "outDir": "lib",
     "strict": true,
     "alwaysStrict": true,
@@ -30,6 +30,25 @@
     // Set `sourceRoot` to  "/" to strip the build path prefix
     // from generated source code references.
     // This improves issue grouping in Sentry.
-    // "sourceRoot": "/"
-  }
+    // "sourceRoot": "/",
+    "paths": {
+      "@config/*": [
+        "config/*"
+      ],
+      "@controllers/*": [
+        "controllers/*"
+      ],
+      "@models/*": [
+        "models/*"
+      ],
+      "@routes/*": [
+        "routes/*"
+      ],
+      "@schemas/*": [
+        "schemas/*"
+      ],
+    }
+  },
+  "exclude": ["node_modules"],
+  "include": ["**/*.ts", "**/*.tsx"]
 }
