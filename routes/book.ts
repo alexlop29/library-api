@@ -1,6 +1,5 @@
 import express from "express";
-import { LibrarianController } from "../controllers/librarian";
-import { BookController, Book } from "../controllers/book";
+import { LibrarianController, BookController, Book } from "../controllers";
 
 const bookRoute = express.Router();
 bookRoute.use(express.json());
