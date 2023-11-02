@@ -2,9 +2,7 @@ import express from "express";
 import * as Sentry from "@sentry/node";
 import { ProfilingIntegration } from "@sentry/profiling-node";
 import { SENTRY_DSN } from "./config/environment";
-import { adminRoute } from "./routes/admin";
-import { bookRoute } from "./routes/book";
-import { loanRoute } from "./routes/loan";
+import { adminRoute, bookRoute, loanRoute } from "./routes";
 import { EXPRESS_PORT } from "./config/environment";
 
 const app = express();

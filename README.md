@@ -47,5 +47,8 @@ Application performance monitoring and error tracking is faciliated through Sent
 
 ## 🚧 To Do
 
-- Update env configs to toggle between test and dev databases
-- Run ESLINT
+- Deploy to production using Heroku.
+- Improve testing by including failure routes.
+- Introduce API versioning.
+- Implement an error handling controller to provide more consistent handling across classes and routes.
+- Introduce pagination for routes returning a list of items in a collection.
