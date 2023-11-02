@@ -47,7 +47,5 @@ Application performance monitoring and error tracking is faciliated through Sent
 
 ## 🚧 To Do
 
-- Remediate ts checks
 - Update env configs to toggle between test and dev databases
-- Consolidate modules with an index.ts in each
 - Resolve the comments

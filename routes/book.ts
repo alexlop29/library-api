@@ -22,10 +22,6 @@ bookRoute.get("/", async (req, res) => {
   }
 });
 
-/*
-NOTE: (alopez) Consider improving error handling by querying for a `validation` to
-return a 400 error.
-*/
 bookRoute.post("/", async (req, res) => {
   const getLibrarianCredentials = await librarianController.getLibrarianId(
     req.body.email,
@@ -49,11 +45,17 @@ bookRoute.post("/", async (req, res) => {
   res.status(200).json(addBook);
 });
 
-// Need to validate librarian identity
-// Need more validations!
-// Only a librarian should be allowed
-// create a book, remove a book, etc.
 bookRoute.delete("/:bookId", async (req, res) => {
+  const getLibrarianCredentials = await librarianController.getLibrarianId(
+    req.body.email,
+  );
+  if (getLibrarianCredentials.hasOwnProperty("error")) {
+    res.status(500).json({
+      status: "Unable to verify librarian credentials",
+      getLibrarianCredentials,
+    });
+    return;
+  }
   const removedBook = await bookController.deleteBook(req.params.bookId);
   if (removedBook.hasOwnProperty("error")) {
     res.status(500).json({
