@@ -32,5 +32,13 @@
     // This improves issue grouping in Sentry.
     "sourceRoot": "/"
   },
-  "include": ["typings/**/*", "src/**/*"]
+  "include": [
+    "typings/**/*",
+    "src/**/*",
+    "config/**/*",
+    "controllers/**/*",
+    "models/**/*",
+    "routes/**/*",
+    "schemas/**/*",
+  ]
 }
