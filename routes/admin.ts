@@ -1,5 +1,10 @@
 import express from "express";
-import { LibrarianController, Librarian, Patron, PatronController } from "../controllers";
+import {
+  LibrarianController,
+  Librarian,
+  Patron,
+  PatronController,
+} from "../controllers";
 
 const adminRoute = express.Router();
 adminRoute.use(express.json());

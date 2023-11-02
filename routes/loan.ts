@@ -1,6 +1,10 @@
 //@ts-nocheck
 import express from "express";
-import { LoanController, PatronController, BookController } from "../controllers";
+import {
+  LoanController,
+  PatronController,
+  BookController,
+} from "../controllers";
 
 const loanRoute = express.Router();
 loanRoute.use(express.json());
