@@ -1,26 +1,33 @@
-//@ts-nocheck
 import { PatronController, Patron } from "../../controllers/patron";
-import { patronModel } from "../../models/patron";
 import { getSamplePatronId } from "../utils/getSamplePatronId";
 
-const fakePatronWithoutLoans = {
+const newSamplePatron = {
   firstName: "Ben",
   lastName: "Lopez",
   email: "ben@thecutestdog.com",
+};
+
+type PatronDefinition = {
+  _id: Number;
+  firstName: String;
+  lastName: String;
+  email: String;
+  status: Boolean;
+  __v: Number;
 };
 
 const patron = new PatronController();
 
 test("adds a new patron", async () => {
   const newPatron = new Patron(
-    fakePatronWithoutLoans.firstName,
-    fakePatronWithoutLoans.lastName,
-    fakePatronWithoutLoans.email,
+    newSamplePatron.firstName,
+    newSamplePatron.lastName,
+    newSamplePatron.email,
   );
   const createPatron = await patron.createPatron(newPatron);
-  expect(createPatron.firstName).toEqual(fakePatronWithoutLoans.firstName);
-  expect(createPatron.lastName).toEqual(fakePatronWithoutLoans.lastName);
-  expect(createPatron.email).toEqual(fakePatronWithoutLoans.email);
+  expect(createPatron.firstName).toEqual(newSamplePatron.firstName);
+  expect(createPatron.lastName).toEqual(newSamplePatron.lastName);
+  expect(createPatron.email).toEqual(newSamplePatron.email);
 });
 
 test("retrieves a patron by id", async () => {
@@ -31,7 +38,7 @@ test("retrieves a patron by id", async () => {
 
 test("retrieves all patrons", async () => {
   const getAllPatrons = await patron.getPatrons();
-  getAllPatrons.forEach((item) => {
+  getAllPatrons.forEach((item: PatronDefinition) => {
     expect(item.firstName).toEqual(expect.any(String));
     expect(item.lastName).toEqual(expect.any(String));
   });

@@ -4,7 +4,7 @@ Contains an API, developed with Node.js, Express.js, and Typescript, to simulate
 
 ### Database Design
 
-`/tmp`` provides an initial overview of the proposed database schema.
+`/tmp` provides an initial overview of the proposed database schema.
 
 ## 🏄 Getting Started
 
@@ -48,4 +48,3 @@ Application performance monitoring and error tracking is faciliated through Sent
 ## 🚧 To Do
 
 - Remediate ts checks
-- Write tests

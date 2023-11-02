@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { LoanController } from "../../controllers/loan";
 import { getSamplePatronId } from "../utils/getSamplePatronId";
 import { getSampleBookId } from "../utils/getSampleBookId";
