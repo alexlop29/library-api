@@ -1,6 +1,9 @@
 {
   "name": "library-api",
   "version": "1.0.0",
+  "engines": {
+    "node": "21.x"
+  },
   "main": "./lib/index.js",
   "repository": {
     "type": "git",
